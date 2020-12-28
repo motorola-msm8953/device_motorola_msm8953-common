@@ -28,10 +28,8 @@ namespace light {
 namespace V2_0 {
 namespace implementation {
 
-#define LED_LIGHT_OFF          0
-#define LED_LIGHT_BLINK_FAST   1
-#define LED_LIGHT_BLINK_SLOW   2
-#define LED_LIGHT_SOLID_ON     3
+#define LED_LIGHT_OFF 0
+#define LED_LIGHT_ON  1
 
 #define LEDS            "/sys/class/leds/"
 
@@ -68,22 +66,11 @@ static void handleBacklight(const LightState& state) {
     set(LCD_LED BRIGHTNESS, brightness);
 }
 
-static void handleBattery(const LightState& state) {
-    uint32_t Brightness;
-
-    if (is_lit(state))
-        Brightness = LED_LIGHT_SOLID_ON;
-    else
-        Brightness = LED_LIGHT_OFF;
-    
-     set(CHARGING_LED BRIGHTNESS, Brightness);
-}
-
 static void handleNotification(const LightState& state) {
     uint32_t Brightness;
 
     if (is_lit(state))
-        Brightness = LED_LIGHT_BLINK_SLOW;
+        Brightness = LED_LIGHT_ON;
     else
         Brightness = LED_LIGHT_OFF;
     
@@ -93,7 +80,7 @@ static void handleNotification(const LightState& state) {
 
 static std::map<Type, std::function<void(const LightState&)>> lights = {
     {Type::BACKLIGHT, handleBacklight},
-    {Type::BATTERY, handleBattery},
+    {Type::BATTERY, handleNotification},
     {Type::NOTIFICATIONS, handleNotification},
     {Type::ATTENTION, handleNotification},
 };
@@ -132,3 +119,4 @@ Return<void> Light::getSupportedTypes(getSupportedTypes_cb _hidl_cb) {
 }  // namespace light
 }  // namespace hardware
 }  // namespace android
+

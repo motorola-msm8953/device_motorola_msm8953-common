@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "android.hardware.light@2.0-service.motorola_msm8953"
+#define LOG_TAG "android.hardware.light@2.0-service.msm8953"
 
 #include <hidl/HidlTransportSupport.h>
 
@@ -31,7 +31,7 @@ using android::sp;
 using android::status_t;
 
 int main() {
-    sp<ILight> service = new Light();
+    android::sp<ILight> service = new Light();
 
     configureRpcThreadpool(1, true);
 
@@ -48,3 +48,4 @@ int main() {
     ALOGI("Light HAL service failed to join thread pool.");
     return 1;
 }
+
